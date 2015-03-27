@@ -95,8 +95,12 @@ controls) in IE8:
 
 Implementing CSS and JavaScript context-sensitive escaping
 will require further research and development. In Ember 1.11,
-bound attribute syntax will warn in places where we cannot
-safely escape the value.
+bound `style` attributes will warn when the value is not marked safe.
+
+```handlebars
+{{! No escaping strategy, log a warning }}
+<a style="width: {{someProperty}}px"></a>
+```
 
 The examples that follow are intended to demonstrate how this
 works in practice. For example these bindings Just Work:
@@ -107,19 +111,19 @@ works in practice. For example these bindings Just Work:
 
 {{! Works as expected, and escapes unsafe urls }}
 <a href="{{someProperty}}"></a>
+
+{{! Works as expected, and escapes unsafe urls }}
+<img src="{{someProperty}}"></a>
 ```
 
-However these bindings do not currently have an escaping strategy,
-and thus will warn in the console when used:
+Warnings about unsafe bindings other than `style` will be introduced
+before Ember 2.0.
 
 ```handlebars
-{{! No escaping strategy, log a warning }}
-<a style="width: {{someProperty}}px"></a>
-
-{{! No escaping strategy, log a warning }}
+{{! No escaping strategy }}
 <a onmouseover="alert('{{someProperty}}');"></a>
 
-{{! No escaping strategy, log a warning }}
+{{! No escaping strategy }}
 <style>width: {{someProperty}}px</style>
 ```
 
